@@ -1,0 +1,80 @@
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /wordpress/
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /wordpress/index.php [L]
+</IfModule>
+# END WordPress
+# BEGIN WordPress
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+#add a trailing splash to /wp-admin
+RewriteRule ^([_0-9a-zA-Z-]+/)?wp-admin$ $1wp-admin/ [R=301,L]
+RewriteCond%{REQUEST_FILENAME}-f[OR]
+RewriteCond%{REQUEST_FILENAME}-d
+RewriteRule^ - [L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?(wp-(content|admin|includes).*) $2 [L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?(.*\.php)$ $2 [L]
+RewriteRule . index.php [L]
+# END WordPress
+# BEGIN WordPress
+<Limit GET POST>
+order allow,deny
+deny from 123.456.78.9
+allow from all
+</Limit>
+# END WordPress
+# BEGIN WordPress
+Redirect 301 /oldpage.html http://www.yourwebsite.com/newpage.html
+# END WordPress
+# BEGIN WordPress
+RewriteEngine On
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+# END WordPress
+# BEGIN WordPress
+<Directory "/var/www/wp-content/uploads/">
+<Files "*.php">
+Order Deny,Allow
+Deny from All
+</Files>
+</Directory>
+# END WordPress
+# BEGIN WordPress
+ErrorDocument 401 /path-to-your-site/index.php?error=404
+ErrorDocument 403 /path-to-your-site/index.php?error=404
+<IfModule mod_rewrite.c>
+RewriteEngine on
+RewriteCond %{REQUEST_URI} ^(.*)?wp-login\.php(.*)$ [OR]
+RewriteCond %{REQUEST_URI} ^(.*)?wp-admin$
+RewriteCond %{REMOTE_ADDR} !^IP Address One$
+RewriteCond %{REMOTE_ADDR} !^IP Address Two$
+RewriteCond %{REMOTE_ADDR} !^IP Address Three$
+RewriteRule ^(.*)$ - [R=403,L]
+</IfModule>
+#END WordPress
+# BEGIN WordPress
+<FilesMatch "\.(jpg)$">
+Header set Cache-Control "public, max-age=3600"
+</FilesMatch>
+#END WordPres
+# BEGIN WordPress
+Options All -Indexes
+# END WordPress
+# BEGIN WordPress
+Options +FollowSymLinks
+RewriteEngine On
+RewriteCond %{QUERY_STRING} (<|%3C).*script.*(>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} GLOBALS(=|[|%[0-9A-Z]{0,2}) [OR]
+RewriteCond %{QUERY_STRING} _REQUEST(=|[|%[0-9A-Z]{0,2})
+RewriteRule ^(.*)$ index.php [F,L]
+# END WordPress
+#BEGIN WordPress
+RewriteEngine On RewriteCond %{HTTP_REFERER} !^$ RewriteCond %{HTTP_REFERER}
+!^http://(www\.)?your-site.com/.*$ [NC] RewriteRule \.(gif|jpg)$
+http://www.your-site.com/example.gif [R,L]
+#END WordPress
